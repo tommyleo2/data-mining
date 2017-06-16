@@ -3,9 +3,11 @@
 
 #include "TrainingSetInMemory.hpp"
 
+using namespace GBDT;
+
 TEST(TrainingSetInMemoryTest, ReadTest) {
-  std::shared_ptr<GBDT::TrainingSet> ptr =
-    std::make_shared<GBDT::TrainingSetInMemory>(201);
+  std::shared_ptr<TrainingSet> ptr =
+    std::make_shared<TrainingSetInMemory>(config::TRAINING_PATH_TEST ,201);
   EXPECT_EQ(1, ptr->getLable(0));
   EXPECT_EQ(1, ptr->getLable(1));
   EXPECT_EQ(0.14285714285714285, ptr->getFeature(0, 98));
