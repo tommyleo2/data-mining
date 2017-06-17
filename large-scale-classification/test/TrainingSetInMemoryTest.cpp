@@ -26,7 +26,7 @@ TEST_F(TrainingSetInMemoryTest, ReadTest) {
 TEST_F(TrainingSetInMemoryTest, SortTest) {
   for (int i = 0; i < ptr->getSetSize(); i++) {
     std::cout << "Sorting: " << i << std::endl;
-    vector<size_type> all(ptr->getSetSize());
+    vector<size_type> all(ptr->getFeatureSize());
     std::iota(all.begin(), all.end(), 0);
     ptr->sortSetByFeature(i, all);
   }
