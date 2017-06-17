@@ -12,8 +12,8 @@ namespace GBDT {
     const double REGULARIZATION = 0;
     const double LAMBDA = 1;
 
-    const int MAX_TREE_DEPTH = 6;
-    const int ITERATION_TIMES = 3000;
+    const unsigned int MAX_TREE_DEPTH = 6;
+    const unsigned int ITERATION_TIMES = 3000;
   }
 }
 

@@ -11,17 +11,16 @@ namespace GBDT {
     using TrainingSetCol_t = vector<double>;
 
     TrainingSet(const string &file_path) : m_file_path(file_path) { }
-    virtual double &getFeature(int id, int index) = 0;
-    virtual double getFeature(int id, int index) const = 0;
+    virtual double getFeature(index_type id, index_type index) const = 0;
 
-    virtual const TrainingSetRow_t &getCase(int id) = 0;
+    virtual const TrainingSetRow_t &getCase(index_type id) = 0;
 
-    virtual double &getLable(int id) = 0;
-    virtual double getLable(int id) const = 0;
-    virtual size_t getSetSize() const = 0;
-    virtual size_t getFeatureSize() const = 0;
+    virtual double &getLable(index_type id) = 0;
+    virtual double getLable(index_type id) const = 0;
+    virtual size_type getSetSize() const = 0;
+    virtual size_type getFeatureSize() const = 0;
 
-    virtual void sortSetByFeature(int index, vector<size_t> &ids) = 0;
+    virtual void sortSetByFeature(index_type index, vector<index_type> &ids) = 0;
   protected:
     string m_file_path;
   };

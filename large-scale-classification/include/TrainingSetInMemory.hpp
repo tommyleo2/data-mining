@@ -13,23 +13,22 @@ namespace GBDT {
   public:
     using TrainingSet_t = vector<TrainingSetRow_t>;
 
-    TrainingSetInMemory(const string &file_path,size_t feature_size);
-    virtual double &getFeature(int id, int index) override;
-    virtual double getFeature(int id, int index) const override;
+    TrainingSetInMemory(const string &file_path,size_type feature_size);
+    virtual double getFeature(index_type id, index_type index) const override;
 
-    virtual const TrainingSetRow_t &getCase(int id) override;
+    virtual const TrainingSetRow_t &getCase(index_type id) override;
 
-    virtual double &getLable(int id) override;
-    virtual double getLable(int id) const override;
-    virtual size_t getSetSize() const override;
-    virtual size_t getFeatureSize() const override;
+    virtual double &getLable(index_type id) override;
+    virtual double getLable(index_type id) const override;
+    virtual size_type getSetSize() const override;
+    virtual size_type getFeatureSize() const override;
 
-    virtual void sortSetByFeature(int index, vector<size_t> &ids) override;
+    virtual void sortSetByFeature(index_type index, vector<index_type> &ids) override;
   protected:
     TrainingSet_t m_data;
     TrainingSetCol_t m_label;
 
-    size_t m_feature_size;
+    size_type m_feature_size;
   };
 
 }

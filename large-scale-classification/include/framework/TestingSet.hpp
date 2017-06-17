@@ -13,8 +13,8 @@ namespace GBDT {
     virtual double getFeature(int id, int index) const = 0;
     virtual double &getLable(int id) = 0;
     virtual double getLable(int id) const = 0;
-    virtual size_t getSetSize() const = 0;
-    virtual size_t getFeatureSize() const = 0;
+    virtual size_type getSetSize() const = 0;
+    virtual size_type getFeatureSize() const = 0;
 
     virtual void dumpResult() const = 0;
 

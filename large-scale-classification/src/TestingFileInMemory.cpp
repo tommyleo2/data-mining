@@ -8,7 +8,7 @@ using namespace GBDT;
 
 TestingSetInMemory::TestingSetInMemory(const string &in_file_path,
                                        const string &out_file_path,
-                                       size_t feature_size) :
+                                       size_type feature_size) :
   TestingSet(in_file_path, out_file_path), m_feature_size(feature_size) {
   LOG_INFO("Start to read test from file...");
 
@@ -56,11 +56,11 @@ double TestingSetInMemory::getFeature(int id, int index) const {
   return m_cases[id][index];
 }
 
-size_t TestingSetInMemory::getSetSize() const {
+size_type TestingSetInMemory::getSetSize() const {
   return m_cases.size();
 }
 
-size_t TestingSetInMemory::getFeatureSize() const {
+size_type TestingSetInMemory::getFeatureSize() const {
   return m_feature_size;
 }
 
@@ -82,7 +82,7 @@ void TestingSetInMemory::dumpResult() const {
   out.precision(std::numeric_limits<double>::digits10);
   out << std::fixed;
   out << "id,label" << std::endl;
-  for (size_t i = 0; i < m_label.size(); i++) {
+  for (size_type i = 0; i < m_label.size(); i++) {
     out << i << ',' << m_label[i] << std::endl;
   }
 }
