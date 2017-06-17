@@ -1,9 +1,9 @@
 #ifndef TRAININGSETINMEMORY_H
 #define TRAININGSETINMEMORY_H
 
-#include "TrainingSet.hpp"
-#include "config.hpp"
-#include <vector>
+#include "framework/TrainingSet.hpp"
+#include "framework/config.hpp"
+
 #include <fstream>
 #include <sstream>
 

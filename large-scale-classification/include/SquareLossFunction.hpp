@@ -1,7 +1,7 @@
 #ifndef SQUARELOSSFUNCTION_H
 #define SQUARELOSSFUNCTION_H
 
-#include "LossFunction.hpp"
+#include "framework/LossFunction.hpp"
 
 namespace GBDT {
   class SquareLossFunction : public LossFunction {

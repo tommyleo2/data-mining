@@ -1,7 +1,7 @@
 #ifndef TESTINGSETINMEMORY_H
 #define TESTINGSETINMEMORY_H
 
-#include "TestingSet.hpp"
+#include "framework/TestingSet.hpp"
 
 namespace GBDT {
 

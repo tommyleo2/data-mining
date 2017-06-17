@@ -7,7 +7,8 @@ namespace GBDT {
 
   class TestingSet {
   public:
-    TestingSet(const string &in_file_path, const string &out_file_path);
+    TestingSet(const string &in_file_path, const string &out_file_path) :
+      m_in_file_path(in_file_path), m_out_file_path(out_file_path) { }
     virtual double &getFeature(int id, int index) = 0;
     virtual double getFeature(int id, int index) const = 0;
     virtual double &getLable(int id) = 0;

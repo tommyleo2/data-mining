@@ -4,6 +4,7 @@
 #include <memory>
 #include <vector>
 #include <iostream>
+#include <tuple>
 
 #include "config.hpp"
 
@@ -12,6 +13,7 @@ namespace GBDT {
   using std::shared_ptr;
   using std::string;
   using std::vector;
+  using std::tuple;
 
 #define LOG_INFO(x) \
   std::cout << x << std::endl
