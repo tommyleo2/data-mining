@@ -6,7 +6,7 @@ using namespace GBDT;
 
 TrainingSetInMemory::TrainingSetInMemory(const string &file_path,
                                          size_type feature_size) :
-  TrainingSet(file_path), m_feature_size(feature_size) {
+  TrainingSet(file_path), m_feature_size(feature_size), order_cache(feature_size) {
 
     LOG_INFO("Start to read samples from file...");
 
@@ -62,10 +62,6 @@ const TrainingSet::TrainingSetRow_t &TrainingSetInMemory::getCase(index_type id)
   return m_data[id];
 }
 
-double &TrainingSetInMemory::getLable(index_type id) {
-  return m_label[id];
-}
-
 double TrainingSetInMemory::getLable(index_type id) const {
   return m_label[id];
 }
@@ -73,12 +69,24 @@ double TrainingSetInMemory::getLable(index_type id) const {
 size_type TrainingSetInMemory::getSetSize() const {
   return m_label.size();
 }
+
 size_type TrainingSetInMemory::getFeatureSize() const {
   return m_feature_size;
 }
 
-void TrainingSetInMemory::sortSetByFeature(index_type index, vector<index_type> &ids) {
+const vector<index_type> &TrainingSetInMemory::sortSetByFeature(index_type index, vector<index_type> &ids) {
   std::sort(ids.begin(), ids.end(), [index, this](index_type a, index_type b) {
-      return m_data[a][index] > m_data[b][index];
+      return m_data[a][index] < m_data[b][index];
     });
+  return ids;
+}
+
+const vector<index_type> &TrainingSetInMemory::sortSetByFeature(index_type index) {
+  if (order_cache[index].size() == 0) {
+    vector<size_type> order(getSetSize());
+      std::iota(order.begin(), order.end(), 0);
+      sortSetByFeature(index, order);
+      order_cache[index] = std::move(order);
+  }
+  return order_cache[index];
 }

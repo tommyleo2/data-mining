@@ -14,6 +14,7 @@ namespace GBDT {
       m_training_set(training_set), m_loss_function(loss_function) { }
     virtual void buildNewTree(vector<double> &residual) = 0;
     virtual double predict(const TrainingSet::TrainingSetRow_t &test_case) = 0;
+    virtual double predictOnLastTree(const TrainingSet::TrainingSetRow_t &test_case) = 0;
   protected:
     shared_ptr<TrainingSet> m_training_set;
     shared_ptr<LossFunction> m_loss_function;

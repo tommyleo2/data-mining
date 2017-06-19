@@ -18,17 +18,19 @@ namespace GBDT {
 
     virtual const TrainingSetRow_t &getCase(index_type id) override;
 
-    virtual double &getLable(index_type id) override;
     virtual double getLable(index_type id) const override;
     virtual size_type getSetSize() const override;
     virtual size_type getFeatureSize() const override;
 
-    virtual void sortSetByFeature(index_type index, vector<index_type> &ids) override;
+    virtual const vector<index_type> &sortSetByFeature(index_type index, vector<index_type> &ids) override;
+    virtual const vector<index_type> &sortSetByFeature(index_type index) override;
   protected:
     TrainingSet_t m_data;
     TrainingSetCol_t m_label;
 
     size_type m_feature_size;
+
+    vector< vector<index_type> > order_cache;
   };
 
 }

@@ -6,15 +6,7 @@ using namespace GBDT;
 
 DecisionTreeInMemory::DecisionTreeInMemory(const shared_ptr<TrainingSet> &training_set,
                                            const shared_ptr<LossFunction> &loss_function) :
-  DecisionTree(training_set, loss_function) {
-  //  cache all features order
-  for (size_type i = 0; i < m_training_set->getFeatureSize(); i++) {
-    vector<size_type> order(m_training_set->getSetSize());
-    std::iota(order.begin(), order.end(), 0);
-    m_training_set->sortSetByFeature(i, order);
-    order_cache.push_back(std::move(order));
-  }
-}
+  DecisionTree(training_set, loss_function) { }
 
 void DecisionTreeInMemory::buildNewTree(vector<double> &residual) {
   vector<double> first_derived(m_training_set->getSetSize());
@@ -25,21 +17,53 @@ void DecisionTreeInMemory::buildNewTree(vector<double> &residual) {
 
   Tree tree(m_training_set, std::move(first_derived), std::move(second_derived));
   vector<index_type> current_layer {0};
-  //  split a tree nodes
   for (size_type i = 0; i < config::MAX_TREE_DEPTH; i++) {
     vector<index_type> next_layer;
     for (auto index : current_layer) {
+      //  split a tree node
       auto split_result = tree.split(index);
+      if (std::get<0>(split_result) == NONE) {
+        continue;
+      }
       next_layer.push_back(std::get<0>(split_result));
       next_layer.push_back(std::get<1>(split_result));
     }
     current_layer = std::move(next_layer);
   }
-  tree.releaseResources();
+  tree.finishTraining();
   m_trees.push_back(std::move(tree));
 }
 
 
 double DecisionTreeInMemory::predict(const TrainingSet::TrainingSetRow_t &test_case) {
-  return 0;
+  double result = 0;
+  for (auto &&tree : m_trees) {
+    const Tree::Node *current_node = &tree[0];
+    while(!current_node->is_leaf()) {
+      index_type feature = std::get<0>(current_node->m_sp);
+      double sp_value = std::get<0>(current_node->m_sp);
+      if (test_case[feature] < sp_value) {
+        current_node = &tree[current_node->m_left];
+      } else {
+        current_node = &tree[current_node->m_right];
+      }
+    }
+    result += config::ALPHA * current_node->m_weight;
+  }
+  return result;
+}
+
+double DecisionTreeInMemory::predictOnLastTree(const TrainingSet::TrainingSetRow_t &test_case) {
+  const Tree *last_tree = &m_trees.back();
+  const Tree::Node *current_node = &last_tree->operator[](0);
+  while(!current_node->is_leaf()) {
+    index_type feature = std::get<0>(current_node->m_sp);
+    double sp_value = std::get<0>(current_node->m_sp);
+    if (test_case[feature] < sp_value) {
+      current_node = &last_tree->operator[](current_node->m_left);
+    } else {
+      current_node = &last_tree->operator[](current_node->m_right);
+    }
+  }
+  return config::ALPHA * current_node->m_weight;
 }

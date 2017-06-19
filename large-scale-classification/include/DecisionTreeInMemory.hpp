@@ -15,10 +15,9 @@ namespace GBDT {
                          const shared_ptr<LossFunction> &loss_function);
     virtual void buildNewTree(vector<double> &residual) override;
     virtual double predict(const TrainingSet::TrainingSetRow_t &test_case) override;
-
+    virtual double predictOnLastTree(const TrainingSet::TrainingSetRow_t &test_case) override;
   protected:
 
-    vector< vector<size_type> > order_cache;
     vector<Tree> m_trees;
   };
 

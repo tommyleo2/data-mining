@@ -15,12 +15,13 @@ namespace GBDT {
 
     virtual const TrainingSetRow_t &getCase(index_type id) = 0;
 
-    virtual double &getLable(index_type id) = 0;
     virtual double getLable(index_type id) const = 0;
     virtual size_type getSetSize() const = 0;
     virtual size_type getFeatureSize() const = 0;
 
-    virtual void sortSetByFeature(index_type index, vector<index_type> &ids) = 0;
+    virtual const vector<index_type> &sortSetByFeature(index_type index, vector<index_type> &ids) = 0;
+    //  the sort the entire set, may use cache
+    virtual const vector<index_type> &sortSetByFeature(index_type index) = 0;
   protected:
     string m_file_path;
   };

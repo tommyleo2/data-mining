@@ -22,15 +22,19 @@ void GBDTAlgorithm::learn() {
 
   //  init residual, the init predict function is set to 0
   LOG_INFO("Initializing residual...");
-  for (size_type i = 0; i < residual.size(); i++) {
+  for (index_type i = 0; i < residual.size(); i++) {
     residual[i] = m_training_set->getLable(i) - 0;
   }
 
   LOG_INFO("Running learning algorithm...");
-  for (int i = 0; i < config::ITERATION_TIMES; i++) {
+  for (index_type i = 0; i < config::ITERATION_TIMES; i++) {
     LOG_INFO("Iterating: " << i << " ...");
     // build a new tree
     m_decision_tree->buildNewTree(residual);
+    LOG_INFO("Updating residual...");
+    for (index_type j = 0; j < residual.size(); j++) {
+      residual[j] -= m_decision_tree->predictOnLastTree(m_training_set->getCase(j));
+    }
   }
 }
 
@@ -42,7 +46,7 @@ void GBDTAlgorithm::predict() {
   }
 
   LOG_INFO("Predicting...");
-  for (size_type i = 0; i < m_testing_set->getSetSize(); i++) {
+  for (index_type i = 0; i < m_testing_set->getSetSize(); i++) {
     m_testing_set->getLable(i) =
       m_decision_tree->predict(m_training_set->getCase(i));
   }
