@@ -1,4 +1,4 @@
-#include "TrainingSetInMemory.hpp"
+#include "in-memory-impl/TrainingSetInMemory.hpp"
 
 #include <algorithm>
 

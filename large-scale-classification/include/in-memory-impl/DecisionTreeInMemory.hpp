@@ -1,8 +1,8 @@
 #ifndef DECISIONTREEINMEMORY_H
 #define DECISIONTREEINMEMORY_H
 
-#include "framework/DecisionTree.hpp"
-#include "framework/Tree.hpp"
+#include "../framework/DecisionTree.hpp"
+#include "../framework/Tree.hpp"
 
 namespace GBDT {
 
@@ -15,7 +15,7 @@ namespace GBDT {
                          const shared_ptr<LossFunction> &loss_function);
     virtual void buildNewTree(vector<double> &residual) override;
     virtual double predict(const TrainingSet::TrainingSetRow_t &test_case) override;
-    virtual double predictOnLastTree(const TrainingSet::TrainingSetRow_t &test_case) override;
+    virtual double predictOnLastTree(index_type id) override;
   protected:
 
     vector<Tree> m_trees;

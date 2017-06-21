@@ -1,4 +1,7 @@
-#include "framework/GBDT.hpp"
+#include "framework/GBDTAlgorithm.hpp"
+
+#include "config.hpp"
+
 
 using namespace GBDT;
 
@@ -23,7 +26,8 @@ void GBDTAlgorithm::learn() {
   //  init residual, the init predict function is set to 0
   LOG_INFO("Initializing residual...");
   for (index_type i = 0; i < residual.size(); i++) {
-    residual[i] = m_training_set->getLable(i) - 0;
+    residual[i] = m_decision_tree->predict(m_training_set->getCase(i)) -
+      m_training_set->getLable(i);
   }
 
   LOG_INFO("Running learning algorithm...");
@@ -33,7 +37,7 @@ void GBDTAlgorithm::learn() {
     m_decision_tree->buildNewTree(residual);
     LOG_INFO("Updating residual...");
     for (index_type j = 0; j < residual.size(); j++) {
-      residual[j] -= m_decision_tree->predictOnLastTree(m_training_set->getCase(j));
+      residual[j] += m_decision_tree->predictOnLastTree(j);
     }
   }
 }

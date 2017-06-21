@@ -1,4 +1,4 @@
-#include "SquareLossFunction.hpp"
+#include "in-memory-impl/SquareLossFunction.hpp"
 
 using namespace GBDT;
 

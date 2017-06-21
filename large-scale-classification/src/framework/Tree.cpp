@@ -1,4 +1,5 @@
 #include "framework/Tree.hpp"
+#include "config.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -10,7 +11,7 @@ tuple<index_type, index_type> Tree::split(index_type index) {
   if (index >= m_nodes.size()) {
     throw std::runtime_error("No such node");
   }
-  if (m_nodes[index].m_left == NONE || m_nodes[index].m_right == NONE) {
+  if (!m_nodes[index].is_leaf()) {
     throw std::runtime_error("Node has been splited already");
   }
 

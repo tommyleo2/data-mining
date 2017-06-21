@@ -8,9 +8,6 @@
 #include <map>
 #include <limits>
 
-#include "config.hpp"
-
-
 namespace GBDT {
   using std::shared_ptr;
   using std::string;
