@@ -16,7 +16,6 @@ tuple<index_type, index_type> Tree::split(index_type index) {
   }
 
   vector<SplitPoint> best_splits(m_training_set->getFeatureSize());
-  Node &current_node = m_nodes[index];
 
   if (index == 0) {  //  root node
     for (index_type i = 0; i < m_training_set->getFeatureSize(); i++) {
@@ -24,7 +23,7 @@ tuple<index_type, index_type> Tree::split(index_type index) {
     }
   } else {  // other nodes
     for (index_type i = 0; i < m_training_set->getFeatureSize(); i++) {
-      best_splits[i] = findFeatureSplit(i, m_training_set->sortSetByFeature(i, current_node.m_attached_cases));
+      best_splits[i] = findFeatureSplit(i, m_training_set->sortSetByFeature(i, m_nodes[index].m_attached_cases));
     }
   }
   auto best_split_it = std::max_element(best_splits.begin(),
@@ -41,17 +40,20 @@ tuple<index_type, index_type> Tree::split(index_type index) {
   //index_type case_index = std::get<0>(*best_split_it);
   double split_value = std::get<1>(*best_split_it);
 
-  current_node.m_sp = std::make_tuple(best_feature, split_value);
+  m_nodes[index].m_sp = std::make_tuple(best_feature, split_value);
 
   //  build children nodes
   Node left(m_training_set), right(m_training_set);
   left.m_parent = index;
   right.m_parent = index;
-  auto split_result = current_node.filter(*best_split_it);
+  auto split_result = m_nodes[index].filter(*best_split_it);
   left.m_attached_cases = std::move(std::get<0>(split_result));
   right.m_attached_cases = std::move(std::get<1>(split_result));
 
+  m_nodes[index].m_left = m_nodes.size();
   m_nodes.push_back(std::move(left));
+
+  m_nodes[index].m_right = m_nodes.size();
   m_nodes.push_back(std::move(right));
 
   return std::make_tuple(m_nodes.size() - 2, m_nodes.size() - 1);

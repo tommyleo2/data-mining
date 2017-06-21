@@ -22,9 +22,10 @@ TestingSetInMemory::TestingSetInMemory(const string &in_file_path,
   while (std::getline(file, line)) {
     std::stringstream ss(line);
     double tmp;
-    int index = 0;
-    int expected = 0;
+    index_type index = 0;
+    index_type expected = 0;
     vector<double> row;
+    ss >> index;
     while (ss >> index) {
       index--;
       ss.ignore();
@@ -46,6 +47,8 @@ TestingSetInMemory::TestingSetInMemory(const string &in_file_path,
     }
   }
   LOG_INFO("Reading samples, done!");
+
+  m_label.resize(m_cases.size());
 }
 
 double &TestingSetInMemory::getFeature(int id, int index) {

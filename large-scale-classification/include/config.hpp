@@ -5,8 +5,11 @@ namespace GBDT {
   namespace config {
     const char * const TRAINING_PATH = "./data/train_data.txt";
     const char * const TRAINING_PATH_TEST = "./data/train_data_test.txt";
-    const char * const MODEL_PATH = "./data/model.raw";
+
     const char * const TEST_PATH = "./data/test_data.txt";
+    const char * const TEST_PATH_TEST = "./data/test_data_test.txt";
+
+    const char * const MODEL_PATH = "./data/model.raw";
     const char * const OUTPUT_PATH = "./data/predict.csv";
 
     const double ETA = 0.1;    //  shrinkage
