@@ -7,9 +7,10 @@
 using namespace GBDT;
 
 DecisionTreeInMemory::DecisionTreeInMemory(const shared_ptr<TrainingSet> &training_set,
-                                           const shared_ptr<LossFunction> &loss_function) :
-  DecisionTree(training_set, loss_function) {
-  std::fstream model_file(config::MODEL_PATH, std::fstream::in|std::fstream::binary);
+                                           const shared_ptr<LossFunction> &loss_function,
+                                           const string model_file_path) :
+  DecisionTree(training_set, loss_function, model_file_path) {
+  std::fstream model_file(m_model_file_path, std::fstream::in|std::fstream::binary);
   if (!model_file) {
     LOG_INFO("No existing model file");
     return;
@@ -23,6 +24,10 @@ DecisionTreeInMemory::DecisionTreeInMemory(const shared_ptr<TrainingSet> &traini
     model_file >> tree;
     m_trees.push_back(std::move(tree));
   }
+}
+
+DecisionTreeInMemory::~DecisionTreeInMemory() {
+  dumpTrees();
 }
 
 void DecisionTreeInMemory::buildNewTree(vector<double> &residual) {
@@ -85,4 +90,18 @@ double DecisionTreeInMemory::predictOnLastTree(index_type id) {
     }
   }
   return config::ETA * current_node->m_weight;
+}
+
+void DecisionTreeInMemory::dumpTrees() {
+  std::fstream file(m_model_file_path, std::fstream::out|std::fstream::binary);
+  LOG_INFO("Dumping model...");
+  if (!file) {
+    LOG_ERROR("Cannot dump model to file: " << m_model_file_path);
+    throw std::runtime_error("Dump model error");
+  }
+
+  file << m_trees.size() << std::endl;
+  for (auto &&tree : m_trees) {
+    file << tree << std::endl;
+  }
 }
