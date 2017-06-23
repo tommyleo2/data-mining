@@ -24,6 +24,16 @@ namespace GBDT {
 
 #define LOG_ERROR(x) \
   std::cerr << x << std::endl
+
+#define LOG_DEBUG(x)
+
+#ifdef ENABLE_DEBUG
+
+#define LOG_DEBUG(x) \
+  std::cout << x << std::endl
+
+#endif // ENABLE_DEBUG
+
 }
 
 #endif /* DEFINES_H */

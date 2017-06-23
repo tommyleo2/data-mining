@@ -59,6 +59,10 @@ double TestingSetInMemory::getFeature(int id, int index) const {
   return m_cases[id][index];
 }
 
+const vector<double> &TestingSetInMemory::getCase(index_type id) {
+  return m_cases[id];
+}
+
 size_type TestingSetInMemory::getSetSize() const {
   return m_cases.size();
 }

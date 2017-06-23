@@ -35,8 +35,10 @@ void DecisionTreeInMemory::buildNewTree(vector<double> &residual) {
   Tree tree(m_training_set, std::move(first_derived), std::move(second_derived));
   vector<index_type> current_layer {0};
   for (size_type i = 0; i < config::MAX_TREE_DEPTH; i++) {
+    LOG_INFO("Building layer: " << i);
     vector<index_type> next_layer;
     for (auto index : current_layer) {
+      LOG_DEBUG("Spliting: " << index);
       //  split a tree node
       auto split_result = tree.split(index);
       if (std::get<0>(split_result) == NONE) {

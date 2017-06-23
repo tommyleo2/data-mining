@@ -52,7 +52,7 @@ void GBDTAlgorithm::predict() {
   LOG_INFO("Predicting...");
   for (index_type i = 0; i < m_testing_set->getSetSize(); i++) {
     m_testing_set->getLable(i) =
-      m_decision_tree->predict(m_training_set->getCase(i));
+      m_decision_tree->predict(m_testing_set->getCase(i));
   }
 
   LOG_INFO("Dumping result...");

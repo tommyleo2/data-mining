@@ -12,6 +12,7 @@ namespace GBDT {
                        size_type feature_size);
     virtual double &getFeature(int id, int index) override;
     virtual double getFeature(int id, int index) const override;
+    virtual const vector<double> &getCase(index_type id) override;
     virtual double &getLable(int id) override;
     virtual double getLable(int id) const override;
     virtual size_type getSetSize() const override;

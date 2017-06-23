@@ -77,13 +77,25 @@ namespace GBDT {
         vector<index_type> left, right;
         index_type feature = std::get<0>(sp);
         double value = std::get<1>(sp);
-        for (auto id : m_attached_cases) {
-          if (m_training_set->getFeature(id, feature) < value) {
-            left.push_back(id);
-          } else {
-            right.push_back(id);
+        if (m_attached_cases.empty()) {  //  root node, use case cache in training_set
+          auto &all_cases = m_training_set->sortSetByFeature(feature);
+          for (auto id : all_cases) {
+            if (m_training_set->getFeature(id, feature) < value) {
+              left.push_back(id);
+            } else {
+              right.push_back(id);
+            }
+          }
+        } else {  // other nodes
+          for (auto id : m_attached_cases) {
+            if (m_training_set->getFeature(id, feature) < value) {
+              left.push_back(id);
+            } else {
+              right.push_back(id);
+            }
           }
         }
+
         return std::make_tuple(std::move(left), std::move(right));
       }
 
