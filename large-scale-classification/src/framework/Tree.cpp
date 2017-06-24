@@ -20,14 +20,23 @@ tuple<index_type, index_type> Tree::split(index_type index) {
   if (index == 0) {  //  root node
     for (index_type i = 0; i < m_training_set->getFeatureSize(); i++) {
       LOG_DEBUG("Looking for feature: " << i);
-      best_splits[i] = findFeatureSplit(i, m_training_set->sortSetByFeature(i));
+      m_thread_pool.putJob([this, i, &best_splits]() {
+          best_splits[i] = findFeatureSplit(i, m_training_set->sortSetByFeature(i));
+        });
     }
   } else {  // other nodes
     for (index_type i = 0; i < m_training_set->getFeatureSize(); i++) {
       LOG_DEBUG("Looking for feature: " << i);
-      best_splits[i] = findFeatureSplit(i, m_training_set->sortSetByFeature(i, m_nodes[index].m_attached_cases));
+      m_thread_pool.putJob([this, i, index, &best_splits]() {
+          auto tmp = m_nodes[index].m_attached_cases;
+          best_splits[i] = findFeatureSplit(i, m_training_set->sortSetByFeature(i, tmp));
+
+        });
     }
   }
+
+  m_thread_pool.wait();
+
   auto best_split_it = std::max_element(best_splits.begin(),
                                         best_splits.end(),
                                         [](const tuple<index_type, double> &first,

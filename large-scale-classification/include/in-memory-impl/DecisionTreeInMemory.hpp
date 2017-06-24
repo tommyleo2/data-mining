@@ -4,6 +4,8 @@
 #include "../framework/DecisionTree.hpp"
 #include "../framework/Tree.hpp"
 
+#include "../ext/SimpleThreadPool.hpp"
+
 namespace GBDT {
 
   class DecisionTreeInMemory : public DecisionTree {
@@ -19,9 +21,11 @@ namespace GBDT {
     virtual double predict(const TrainingSet::TrainingSetRow_t &test_case) override;
     virtual double predictOnLastTree(index_type id) override;
     virtual void dumpTrees() override;
-  protected:
 
+  protected:
     vector<Tree> m_trees;
+
+    SimpleThreadPool::ThreadPool m_thread_pool;
   };
 
 }  // GBDT

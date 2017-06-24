@@ -18,6 +18,8 @@ namespace GBDT {
 
     const unsigned int MAX_TREE_DEPTH = 6;
     const unsigned int ITERATION_TIMES = 10;
+
+    const unsigned int THREAD_NUM = 4;
   }
 }
 

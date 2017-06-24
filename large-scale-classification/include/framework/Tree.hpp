@@ -4,6 +4,8 @@
 #include "defines.hpp"
 #include "TrainingSet.hpp"
 
+#include "../ext/SimpleThreadPool.hpp"
+
 #include <numeric>
 #include <iostream>
 
@@ -117,13 +119,16 @@ namespace GBDT {
     };
 
   public:
-    Tree() { }
+    Tree(SimpleThreadPool::ThreadPool &pool) :
+      m_thread_pool(pool) { }
     Tree(const shared_ptr<TrainingSet> &training_set,
          vector<double> &&first_derived,
-         vector<double> &&second_derived) :
+         vector<double> &&second_derived,
+         SimpleThreadPool::ThreadPool &pool) :
       m_training_set(training_set),
       m_first_derived(std::forward< vector<double> >(first_derived)),
-      m_second_derived(std::forward< vector<double> >(second_derived)) {
+      m_second_derived(std::forward< vector<double> >(second_derived)),
+      m_thread_pool(pool) {
       //  init root node
       Node tmp(m_training_set);
       m_nodes.push_back(std::move(tmp));
@@ -160,6 +165,8 @@ namespace GBDT {
     shared_ptr<TrainingSet> m_training_set;
     vector<double> m_first_derived;
     vector<double> m_second_derived;
+
+    SimpleThreadPool::ThreadPool &m_thread_pool;
   };
 
 

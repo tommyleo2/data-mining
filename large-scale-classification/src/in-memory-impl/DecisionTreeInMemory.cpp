@@ -9,7 +9,8 @@ using namespace GBDT;
 DecisionTreeInMemory::DecisionTreeInMemory(const shared_ptr<TrainingSet> &training_set,
                                            const shared_ptr<LossFunction> &loss_function,
                                            const string model_file_path) :
-  DecisionTree(training_set, loss_function, model_file_path) {
+  DecisionTree(training_set, loss_function, model_file_path),
+  m_thread_pool(config::THREAD_NUM) {
   std::fstream model_file(m_model_file_path, std::fstream::in|std::fstream::binary);
   if (!model_file) {
     LOG_INFO("No existing model file");
@@ -20,7 +21,7 @@ DecisionTreeInMemory::DecisionTreeInMemory(const shared_ptr<TrainingSet> &traini
   model_file >> size;
   m_trees.reserve(size);
   while (size--) {
-    Tree tree;
+    Tree tree(m_thread_pool);
     model_file >> tree;
     m_trees.push_back(std::move(tree));
   }
@@ -37,7 +38,8 @@ void DecisionTreeInMemory::buildNewTree(vector<double> &residual) {
   m_loss_function->apply_1_DF(residual, first_derived);
   m_loss_function->apply_2_DF(residual, second_derived);
 
-  Tree tree(m_training_set, std::move(first_derived), std::move(second_derived));
+  Tree tree(m_training_set, std::move(first_derived), std::move(second_derived),
+            m_thread_pool);
   vector<index_type> current_layer {0};
   for (size_type i = 0; i < config::MAX_TREE_DEPTH; i++) {
     LOG_INFO("Building layer: " << i);
